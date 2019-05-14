@@ -1,0 +1,50 @@
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
+ADVEO Stock2/
+ASCII To Base64/
+AutopropertyInStruct/
+Cast Boolean To Int/
+ClosureDemo/
+Convert Kunden/
+Cultures/
+DataAdapter/
+DictionaryAddInMultipleThreads/
+EIMI/
+Excel Automation/
+GetHashCodeImpl/
+Hash Table/
+InvokeFromBasePointer/
+IsAssignableFrom/
+MultiplyByRecursion/
+OSCARnet CAB Unpacker Service Locator/
+RegexDemo/
+Report Viewer Test Application - Vitaly N. Glushko/
+StephenToub_.NETCorePerformanceImprovements/
+Stripe.Charge/
+XMLSerializer/
+caseInsensitiveDictionary/
+enum/
+nonVirtualMethodHiding/
+nullString/
