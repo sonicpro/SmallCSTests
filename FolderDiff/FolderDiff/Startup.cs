@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using FolderDiff.Services;
 
 namespace FolderDiff
@@ -25,9 +24,10 @@ namespace FolderDiff
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			IConfigurationSection section = Configuration.GetSection("FolderOptions");
-			services.Configure<FolderOptions>(section);
+			IConfigurationSection section = Configuration.GetSection("FolderDiffOptions");
+			services.Configure<FolderDiffOptions>(section);
 
+			services.AddTransient<TextFileComparer>();
 			services.AddTransient<FolderComparisonService>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

@@ -14,11 +14,17 @@ namespace FolderDiff.Controllers
 			this.comparisonService = comparisonService;
 		}
 
-		[HttpGet("configuration")]
-		public ActionResult<string> GetConfiguration()
+		//[HttpGet("configuration")]
+		//public ActionResult<string> GetConfiguration()
+		//{
+		//	return new ActionResult<string>($"RemoteFolder: {comparisonService.remoteFolderPath}; " +
+		//		$"LocalFolder: {comparisonService.localFolderPath}; IgnoreEncoding: {comparisonService.comparer.ignoreEncoding}");
+		//}
+
+		[HttpGet]
+		public IActionResult GetFilderDifference()
 		{
-			return new ActionResult<string>($"RemoteFolder: {comparisonService.RemoteFolderPath}; " +
-				$"LocalFolder: {comparisonService.LocalFolderPath}");
+			return Ok(comparisonService.Compare());
 		}
 	}
 }

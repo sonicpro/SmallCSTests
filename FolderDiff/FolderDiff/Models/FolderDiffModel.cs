@@ -10,6 +10,8 @@ namespace FolderDiff.Models
 
 		public IList<FileModel> Different { get; set; }
 
+		public IList<FileModel> Same { get; set; }
+
 		public IList<FileModel> LocalIgnored { get; set; }
 
 		public IList<FileModel> RemoteIgnored { get; set; }
