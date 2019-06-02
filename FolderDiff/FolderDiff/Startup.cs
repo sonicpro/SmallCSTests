@@ -27,8 +27,9 @@ namespace FolderDiff
 			IConfigurationSection section = Configuration.GetSection("FolderDiffOptions");
 			services.Configure<FolderDiffOptions>(section);
 
-			services.AddTransient<TextFileComparer>();
-			services.AddTransient<FolderComparisonService>();
+			services.AddScoped<TextFileComparer>();
+			services.AddScoped<FolderComparisonService>();
+			services.AddScoped<FileComparisonService>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}

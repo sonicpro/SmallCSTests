@@ -7,16 +7,19 @@ void Main()
 	var local = Directory.GetFiles(@"D:\SourcesCS\SmallCSTests\FolderDiff\Ucs2");
 	var remote = Directory.GetFiles(@"D:\SourcesCS\SmallCSTests\FolderDiff\Utf8");
 
-	var localFilePath = local.First(n => Path.GetFileName(n) == "a.txt");
-	var remoteFilePath = remote.First(n => Path.GetFileName(n) == "a.txt");
+	var localFilePath = local.First(n => Path.GetFileName(n) == "!output.txt");
+	var remoteFilePath = remote.First(n => Path.GetFileName(n) == "!output.txt");
 	Console.WriteLine(FirstDiscrepancyFinder(localFilePath, remoteFilePath));
 	
 }
 
-private int FirstDiscrepancyFinder(string firstFilePath, string secondFilePath)
+private static int FirstDiscrepancyFinder(string firstFilePath, string secondFilePath)
 {
-	var isFirstFileShorter = File.ReadAllLines(firstFilePath).Length <
-		File.ReadAllLines(secondFilePath).Length;
+	var firstFileContents = File.ReadAllLines(firstFilePath);
+	var secondFileContents = File.ReadAllLines(secondFilePath);
+	
+	var isFirstFileShorter = firstFileContents.Length < secondFileContents.Length;
+	
 	if (isFirstFileShorter)
 		Console.WriteLine("Bingo!");
 	IEnumerable<string> longerContents = File.ReadLines(isFirstFileShorter ? secondFilePath : firstFilePath);
