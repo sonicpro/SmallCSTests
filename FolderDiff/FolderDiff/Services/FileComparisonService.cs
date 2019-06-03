@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace FolderDiff.Services
 {
@@ -13,10 +14,13 @@ namespace FolderDiff.Services
 
 		private string remoteFolderPath;
 
+		private bool ignoreEncoding;
+
 		public FileComparisonService(IOptions<FolderDiffOptions> settings)
 		{
 			localFolderPath = settings.Value.LocalFolderPath;
 			remoteFolderPath = settings.Value.RemoteFolderPath;
+			ignoreEncoding = settings.Value.IgnoreEncoding;
 		}
 
 		public FileDiffModel GetFileDifference(string fileName)
@@ -32,19 +36,37 @@ namespace FolderDiff.Services
 				throw new InvalidOperationException();
 			}
 
-			int firstDifferentLineIndex = GetFirstDiscrepancyIndex(localFilePath, remoteFilePath);
-			var localFileContents = File.ReadAllLines(localFilePath);
-			var remoteFileContents = File.ReadAllLines(remoteFilePath);
-			return new FileDiffModel
+			var result = new FileDiffModel
 			{
 				Name = fileName,
-				LocalFirstDifferentLineIndex = (localFileContents.Length - 1) < firstDifferentLineIndex ? -1 : firstDifferentLineIndex,
-				RemoteFirstDifferentLineIndex = (remoteFileContents.Length - 1) < firstDifferentLineIndex ? -1 : firstDifferentLineIndex,
-				LocalFirstDifferentText = (localFileContents.Length - 1) < firstDifferentLineIndex ? string.Empty :
-					localFileContents[firstDifferentLineIndex],
-				RemoteFirstDifferentText = (remoteFileContents.Length - 1) < firstDifferentLineIndex ? string.Empty :
-					remoteFileContents[firstDifferentLineIndex]
+				RemoteDetectedEncoding = DetectEncoding(remoteFilePath),
+				LocalDetectedEncoding = DetectEncoding(localFilePath)
 			};
+
+			var localFileDifferentText = string.Empty;
+			var remoteFileDifferentText = string.Empty;
+			var localFileContents = File.ReadAllLines(localFilePath);
+			var remoteFileContents = File.ReadAllLines(remoteFilePath);
+			var differentLineIndex = 0;
+
+			if (ignoreEncoding || result.RemoteDetectedEncoding.GetType() == result.LocalDetectedEncoding.GetType())
+			{
+				differentLineIndex = GetFirstDiscrepancyIndex(localFilePath, remoteFilePath);
+			}
+
+			if (differentLineIndex < localFileContents.Length)
+			{
+				localFileDifferentText = localFileContents[differentLineIndex];
+			}
+			if (differentLineIndex < remoteFileContents.Length)
+			{
+				remoteFileDifferentText = remoteFileContents[differentLineIndex];
+			}
+
+			result.DifferentLineIndex = differentLineIndex;
+			result.LocalFirstDifferentLineText = localFileDifferentText;
+			result.RemoteFirstDifferentLineText = remoteFileDifferentText;
+			return result;
 		}
 
 		#region Helper Methods
@@ -65,6 +87,17 @@ namespace FolderDiff.Services
 				return differentLineIndex;
 			}
 			return ++differentLineIndex;
+		}
+
+		private static Encoding DetectEncoding(string fullName)
+		{
+			var buffer = new char[1000];
+			using (var fs = new FileStream(fullName, FileMode.Open, FileAccess.Read))
+			using (var sr = new StreamReader(fs, true))
+			{
+				sr.ReadBlock(buffer, 0, 1000);
+				return sr.CurrentEncoding;
+			}
 		}
 
 		#endregion

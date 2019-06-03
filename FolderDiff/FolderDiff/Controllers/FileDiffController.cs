@@ -14,7 +14,6 @@ namespace FolderDiff.Controllers
 	{
 		private FolderComparisonService folderComparisonService;
 		private FileComparisonService fileComparisonService;
-		private bool ignoreEncoding;
 
 		public FileDiffController(FolderComparisonService folderComparisonService,
 			FileComparisonService fileComparisonService,
@@ -22,7 +21,6 @@ namespace FolderDiff.Controllers
 		{
 			this.folderComparisonService = folderComparisonService;
 			this.fileComparisonService = fileComparisonService;
-			this.ignoreEncoding = settings.Value.IgnoreEncoding;
 		}
 
 		[HttpGet("{fileName}")]
@@ -37,25 +35,9 @@ namespace FolderDiff.Controllers
 				return NotFound();
 			}
 
-			if (!ignoreEncoding && fileModel.LocalDetectedEncoding.GetType() != fileModel.RemoteDetectedEncoding.GetType())
-			{
-				var result = new FileDiffModel
-				{
-					Name = fileModel.Name,
-					LocalDetectedEncoding = fileModel.LocalDetectedEncoding,
-					RemoteDetectedEncoding = fileModel.RemoteDetectedEncoding,
-					LocalFirstDifferentLineIndex = 0,
-					RemoteFirstDifferentLineIndex = 0,
-					LocalFirstDifferentText = fileModel.LocalFileFirstLine,
-					RemoteFirstDifferentText = fileModel.RemoteFileFirstLine
-				};
-			}
-
 			try
 			{
 				var result = fileComparisonService.GetFileDifference(fileName);
-				result.LocalDetectedEncoding = fileModel.LocalDetectedEncoding;
-				result.RemoteDetectedEncoding = fileModel.RemoteDetectedEncoding;
 				return Ok(result);
 			}
 			catch

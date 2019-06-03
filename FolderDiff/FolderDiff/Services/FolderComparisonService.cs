@@ -42,12 +42,12 @@ namespace FolderDiff.Services
 
 			return new FolderDiffModel
 			{
-				LocalOnly = FileInfoToFileModelList(localOnly, fi => new FileModel { Name = fi.Name }),
-				RemoteOnly = FileInfoToFileModelList(remoteOnly, fi => new FileModel { Name = fi.Name }),
-				LocalIgnored = FileInfoToFileModelList(localIgnored, fi => new FileModel { Name = fi.Name }),
-				RemoteIgnored = FileInfoToFileModelList(remoteIgnored, fi => new FileModel { Name = fi.Name }),
-				Different = FileInfoToFileModelList(localDifferent, LocalDifferentToFileModel),
-				Same = FileInfoToFileModelList(same, fi => new FileModel { Name = fi.Name })
+				LocalOnly = FileInfoToFileModelList(localOnly),
+				RemoteOnly = FileInfoToFileModelList(remoteOnly),
+				LocalIgnored = FileInfoToFileModelList(localIgnored),
+				RemoteIgnored = FileInfoToFileModelList(remoteIgnored),
+				Different = FileInfoToFileModelList(localDifferent),
+				Same = FileInfoToFileModelList(same)
 			};
 		}
 
@@ -69,33 +69,9 @@ namespace FolderDiff.Services
 			return chars.Any(c => c == '0');
 		}
 
-		private static IList<FileModel> FileInfoToFileModelList(IEnumerable<FileInfo> fileInfos, Func<FileInfo, FileModel> transformer)
+		private static IList<FileModel> FileInfoToFileModelList(IEnumerable<FileInfo> fileInfos)
 		{
-			return fileInfos.Select(transformer).ToList();
-		}
-
-		private FileModel LocalDifferentToFileModel(FileInfo localFile)
-		{
-			var remoteFile = new FileInfo(Path.Combine(remoteFolderPath, localFile.Name));
-			return new FileModel
-			{
-				Name = localFile.Name,
-				LocalDetectedEncoding = DetectEncoding(localFile),
-				RemoteDetectedEncoding = DetectEncoding(remoteFile),
-				LocalFileFirstLine = File.ReadLines(localFile.FullName).First(),
-				RemoteFileFirstLine = File.ReadLines(remoteFile.FullName).First()
-			};
-		}
-
-		private static Encoding DetectEncoding(FileInfo fi)
-		{
-			var buffer = new char[1000];
-			using (var fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read))
-			using (var sr = new StreamReader(fs, true))
-			{
-				sr.ReadBlock(buffer, 0, 1000);
-				return sr.CurrentEncoding;
-			}
+			return fileInfos.Select(fi => new FileModel { Name = fi.Name }).ToList();
 		}
 
 		#endregion
