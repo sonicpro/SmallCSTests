@@ -13,12 +13,26 @@ namespace OAuthTest
 		private const string grantType = "client_credentials";
 		private const string clientId = "MartinsburgMonster";
 		private const string clientSecret = "bb3ab7975429748834c28686d3886840";
+		private const string authorizationScheme = "Bearer";
+		private const string apiBaseUrl = "coop.apps.symfonycasts.com";
+		private const string httpScheme = "http";
+		private const string host = "coop.apps.symfonycasts.com";
+		private const int port = 80;
+		private const string pathFormat = "/api/{0}/eggs-count";
+		private const string userId = "333";
 
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Coop API (http://http://coop.apps.symfonycasts.com).");
 			AccessToken token = AcquireTokenAsync().Result;
 			Console.WriteLine($"AccessToken: {token.access_token}");
+
+			Console.WriteLine("Counting eggs ...");
+			var path = string.Format(pathFormat, userId);
+			var apiUrl = new UriBuilder(httpScheme, host, port, path).ToString();
+			var eggs = CountEggs("", token.access_token, apiUrl, authorizationScheme).Result;
+			var responseMessage = eggs.Content.ReadAsStringAsync().Result;
+			Console.WriteLine(responseMessage);
 		}
 
 
@@ -51,6 +65,20 @@ namespace OAuthTest
 			formData.Add(new KeyValuePair<string, string>(authGrant, grantType));
 
 			return new FormUrlEncodedContent(formData);
+		}
+
+		private static async Task<HttpResponseMessage> CountEggs(string payloadJson,
+			string accessToken,
+			string apiUri,
+			string authorizationScheme)
+		{
+			using (var client = new HttpClient())
+			using (HttpContent content = new StringContent(payloadJson))
+			using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, apiUri))
+			{
+				message.Headers.Authorization = new AuthenticationHeaderValue(authorizationScheme, accessToken);
+				return await client.SendAsync(message);
+			}
 		}
 
 		#endregion
