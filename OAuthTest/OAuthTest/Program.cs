@@ -9,10 +9,10 @@ namespace OAuthTest
 {
 	class Program
 	{
-		private const string AuthGrant = "grant_type";
-		private const string GrantType = "client_credentials";
-		private const string ClientId = "MartinsburgMonster";
-		private const string ClientSecret = "bb3ab7975429748834c28686d3886840";
+		private const string authGrant = "grant_type";
+		private const string grantType = "client_credentials";
+		private const string clientId = "MartinsburgMonster";
+		private const string clientSecret = "bb3ab7975429748834c28686d3886840";
 
 		static void Main(string[] args)
 		{
@@ -33,7 +33,7 @@ namespace OAuthTest
 				client.DefaultRequestHeaders.Accept.Add(
 					new MediaTypeWithQualityHeaderValue("application/json"));
 
-				var content = GetBody(AuthGrant, GrantType, ClientId, ClientSecret);
+				var content = GetBody(authGrant, grantType, clientId, clientSecret);
 				var response = await client.PostAsync("http://coop.apps.knpuniversity.com/token", content);
 				var messageString = await response.Content.ReadAsStringAsync();
 				return JsonConvert.DeserializeObject<AccessToken>(messageString);
