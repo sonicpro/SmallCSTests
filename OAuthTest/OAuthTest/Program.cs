@@ -73,7 +73,7 @@ namespace OAuthTest
 			string authorizationScheme)
 		{
 			using (var client = new HttpClient())
-			using (HttpContent content = new StringContent(payloadJson))
+			//using (HttpContent content = new StringContent(payloadJson))
 			using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, apiUri))
 			{
 				message.Headers.Authorization = new AuthenticationHeaderValue(authorizationScheme, accessToken);
