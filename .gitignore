@@ -22,6 +22,8 @@ bld/
 # Visual Studio 2015 cache/options directory
 .vs/
 
+/*.zip
+
 ADVEO Stock2/
 ASCII To Base64/
 AutopropertyInStruct/
@@ -48,3 +50,23 @@ caseInsensitiveDictionary/
 enum/
 nonVirtualMethodHiding/
 nullString/
+protected virtual member/
+AnonymousObject/
+APNSNotificationFromCS/APNSNotificationFromCS/packages/
+CS Local Function/
+CSScriptNpp/
+Captured Variables/
+CharacterLiteral/
+Deya's Game/
+FolderComparisonApi/
+IHeaderDictionary/
+Implementing ComparerT/
+LCIDs/
+Linq/
+NULL DataSet/
+Non-Initialized int/
+ReferenceEquality/
+SendHttp2RequestInCS/SendHttp2RequestInCS/packages/
+String.Format/
+StringComparison_IsNot_StringComparer/
+centigrade.cs
