@@ -12,7 +12,7 @@ namespace OAuthTest
 		private const string authGrant = "grant_type";
 		private const string grantType = "client_credentials";
 		private const string clientId = "MartinsburgMonster";
-		private const string clientSecret = "bb3ab7975429748834c28686d3886840";
+		private const string clientSecret = "putTheSecretHere";
 		private const string authorizationScheme = "Bearer";
 		private const string apiBaseUrl = "coop.apps.symfonycasts.com";
 		private const string httpScheme = "http";
