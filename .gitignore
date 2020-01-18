@@ -70,3 +70,5 @@ SendHttp2RequestInCS/SendHttp2RequestInCS/packages/
 String.Format/
 StringComparison_IsNot_StringComparer/
 centigrade.cs
+Operatornameof*
+
