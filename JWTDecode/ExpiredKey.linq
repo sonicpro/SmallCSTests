@@ -24,7 +24,11 @@ void Main()
 // Define other methods and classes here
 private static string Base64UrlToBase64(string base64Url)
 {
-	// The byte cannot fit into single Base64 digit. Therefore when the paddings ('=' characters) are removed during Base64 conversion to Base64Url, we cannot get the resulting string modulo 4 equal 1. See the encoding examples below.
+	// During conversion from Base64 to Base64Url the padding characters ('=') are dropped.
+	// Valid paddings are either '=' or '==' and never '==='. Reason: to get '===' padding we must have 18 zero bits at the end of the byte array that is being converted to Base 64 padded with zeroes so
+	// that numberOfBits % 24 == 0.
+	// It means that the byte array length in bits modulo 24 (which is LCM of 8 and 6) must be equal 6. It is never true, because the byte array length in bits is multiple of 8,
+	// and the multiple of eight modulo 24 is either 0, or 8, or 16, and never 6.
 	if ((base64Url.Length % 4) == 1)
 	{
 		throw new ArgumentException("The input is not a Base64Url-encoded string.");
@@ -35,7 +39,7 @@ private static string Base64UrlToBase64(string base64Url)
 	return base64Url.Replace('-', '+').Replace('_', '/') + padding;
 }
 
-// ------------------- Encoding examples ( the rule - always pad the bits that represent Base64 digits to be divisible by 24 with zeroes) -----------------------------------------
+// ------------------- Encoding examples ( the rule - always pad the bits that represent Base64 digits with zeroes to be divisible by 24) -----------------------------------------
 //      Example 1 - encoding 16 bits ('Ma' in ACSII) to Base64
 //    M (77)          |     a (97)   
 // 0 1 0 0  1 1   0 1 | 0 1 1 0   0 0 0 1
