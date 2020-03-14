@@ -1,59 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DictionaryMeta;
 
-namespace DictionaryVisualizer
+namespace MutableReferenceTypeAsAKey
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly DictionaryMetadata<string, Book> metadata;
+        private readonly DictionaryMetadata<GoodButMutableTestRefKey, string> metadata;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            var book1 = new Book("J.R.R. Tolkien", "The Lord of the Rings");
-            var book2 = new Book("Patrick Rothfuss", "Name of the Wind");
-            // For the next item "targetBucket" ("Frank Herbert".GetHashCode() % 7) collides with the one for the book1.
-            // We will store the book3 in the first available slot in "entries" array storing the old collided entry index in the new entry "next" property.
-            // Then we replace buckets[targetBucket] value with the new entry index in the Entries array.
-            var book3 = new Book("Frank Herbert", "Dune");
-            //var book4 = new Book("Iain M. Banks", "Consider Phlebas");
-            //var book5 = new Book("Isaac Asimov", "Foundation");
-            //var book6 = new Book("Arthur Clarke", "2001: Space Odyssey");
+            var key = new GoodButMutableTestRefKey(3);
 
-            // For a five-item-sized dictionary .NET provides seven buckets.
-            var dict = new Dictionary<string, Book>(5)
+            // For a dictionaties with the size from 1 to 3 items, the number of buckets equals 3.
+            var dictWithMutableKey = new Dictionary<GoodButMutableTestRefKey, string>
             {
-                { book1.Author, book1},
-                { book2.Author, book2},
-                { book3.Author, book3},
-                //{ book4.Author, book4},
-                //{ book5.Author, book5},
-                //{ book6.Author, book6},
+                { key, "Hello!" }
             };
 
-            //dict.Remove(book2.Author);
-            //dict.Remove(book5.Author);
+            // Mutate the key object. This affects both the GetHashCode() return value and Equals(obj) equality test.
+            key.Key = 1;
 
-            var extractor = new DictionaryMetadataExtractor<string, Book>();
+            try
+            {
+                var obj1 = dictWithMutableKey[key];
+            }
+            catch(KeyNotFoundException)
+            {
+                this.LookupByTheWrongBucket.Content = "(GetHashCode() % buckets.Length) returns \"targetBucket\" 1 instead of 0";
+            }
 
-            metadata = extractor.ExtractMetadata(dict);
+            try
+            {
+                var obj2 = dictWithMutableKey[new GoodButMutableTestRefKey(3)];
+            }
+            catch(KeyNotFoundException)
+            {
+                this.EqualityComparisonForKeysFailed.Content = "Bucket is correct now, but the referenced Entry has a key that is different from \"3\"";
+            }
+
+            try
+            {
+                var obj3 = dictWithMutableKey[new GoodButMutableTestRefKey(1)];
+            }
+            catch (KeyNotFoundException)
+            {
+                this.LookupByTheWrongBucket2.Content = "(GetHashCode() % buckets.Length) returns \"targetBucket\" 1 instead of 0 again";
+            }
+
+            var extractor = new DictionaryMetadataExtractor<GoodButMutableTestRefKey, string>();
+
+            metadata = extractor.ExtractMetadata(dictWithMutableKey);
 
             this.DrawVisualization(metadata);
         }

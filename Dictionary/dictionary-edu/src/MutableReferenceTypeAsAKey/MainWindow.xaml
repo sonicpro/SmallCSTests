@@ -1,0 +1,44 @@
+﻿<Window x:Class="MutableReferenceTypeAsAKey.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow"
+        Height="480"
+        Width="785">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize"
+                    Value="24"></Setter>
+            <Setter Property="VerticalAlignment"
+                    Value="Center"></Setter>
+            <Setter Property="HorizontalAlignment"
+                    Value="Center"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" CanContentScroll="True" HorizontalAlignment="Right" Width="777">
+            <Grid x:Name="RootGrid" Margin="0, 0, 0, 36">
+                <Grid x:Name="EntriesGrid"
+                      SizeChanged="EntriesGrid_OnSizeChanged"
+                      Margin="24, 12, 0, 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+
+                        <ColumnDefinition Width="50" />
+
+                        <ColumnDefinition Width="Auto" />
+
+                        <ColumnDefinition Width="100" />
+
+                        <ColumnDefinition Width="Auto" />
+
+                        <ColumnDefinition Width="100" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <Canvas x:Name="ArrowsCanvas" />
+                <Label x:Name="LookupByTheWrongBucket" Margin="0,366,0,28" Padding="10,5,5,5"></Label>
+                <Label x:Name="EqualityComparisonForKeysFailed" Margin="0,390,0,0" Padding="10,5,5,5"></Label>
+                <Label x:Name="LookupByTheWrongBucket2" Margin="0,413,0,-20" Padding="10,5,5,5" />
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>
