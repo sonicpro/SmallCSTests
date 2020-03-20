@@ -71,3 +71,4 @@ StringComparison_IsNot_StringComparer/
 centigrade.cs
 Operatornameof*
 StaticConstructor/
+Volatile/
