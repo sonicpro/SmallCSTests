@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29827.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CovariantGenericTypeInterface", "ConsoleApp1\CovariantGenericTypeInterface.csproj", "{7D1BE065-8F6E-4113-AFAA-CEB46F6BF0CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContravariantGenericTypeInterface", "ContravariantGenericTypeInterface\ContravariantGenericTypeInterface.csproj", "{93949AC0-7FDB-42CD-9DF8-8C62B0381ECB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D1BE065-8F6E-4113-AFAA-CEB46F6BF0CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D1BE065-8F6E-4113-AFAA-CEB46F6BF0CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D1BE065-8F6E-4113-AFAA-CEB46F6BF0CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D1BE065-8F6E-4113-AFAA-CEB46F6BF0CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93949AC0-7FDB-42CD-9DF8-8C62B0381ECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93949AC0-7FDB-42CD-9DF8-8C62B0381ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93949AC0-7FDB-42CD-9DF8-8C62B0381ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93949AC0-7FDB-42CD-9DF8-8C62B0381ECB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7EB1E058-1DEA-4C8B-B1B8-0D5A489BB24D}
+	EndGlobalSection
+EndGlobal
