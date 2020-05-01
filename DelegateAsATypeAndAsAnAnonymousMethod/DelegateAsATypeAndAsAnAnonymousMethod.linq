@@ -7,7 +7,7 @@ void Main()
 	{
 		return valueToTest % 2 == 0;
 	};
-	values.Where(valueToTest => { return valueToTest % 2 == 0; }).Dump();
+	values.Where(new Func<int, bool>(pred)).Dump();
 }
 
 delegate bool FinderPredicate(int valueToTest);
