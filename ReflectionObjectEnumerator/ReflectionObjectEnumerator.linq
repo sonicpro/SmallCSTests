@@ -64,7 +64,7 @@ private static IEnumerable<(string, object, Type)> EnumerateSearchCriterionPaths
         {
             if (property != null && Attribute.IsDefined(property, typeof(SearchCriterionAttribute), false))
             {
-                yield return (parentPath, containingObject, property.PropertyType);
+                yield return (parentPath, containingObject, containingObjectType);
             }
             else
             {
@@ -101,6 +101,11 @@ private static IEnumerable<(string, object, Type)> EnumerateSearchCriterionPaths
             {
                 queue.Enqueue((parentPath, null, ((IList)containingObject)[i], containingObjectType.GetGenericArguments()[0]));
             }
+        }
+        else if (Attribute.IsDefined(property, typeof(SearchCriterionAttribute), false))
+        {
+            // A Struct property marked by SearchCriterionAttribure.        
+            yield return (parentPath, containingObject, containingObjectType);
         }
     }
 }
