@@ -4,6 +4,16 @@ void Main()
 {
     var appearance = new Appearance
     {
+        Shape = new ShapeDescriptor
+        {
+            BoundingBox = new BoundingBox
+            {
+                top = 0f,
+                left = 12f,
+                right = 125f,
+                bottom = 210f
+            }
+        },
         VehicleInfo = new VehicleInfo
         {
             Type = new MetadataInfo { Value = "tractor" },
@@ -76,8 +86,18 @@ private static IEnumerable<(string, object, Type)> EnumerateSearchCriterionPaths
                     {
                         continue;
                     }
+                    
+                    var propertyValue = prop.GetValue(containingObject);
+                    var propertyNameReplacement = GetReplacementName(prop);
+                    if (propertyNameReplacement != null)
+                    {
+                        var replacementPropertyValue = ValueConvertor(propertyValue, prop.PropertyType);
+                        var replacementProperty = containingObjectType.GetProperties(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public)
+                            .Where(p => p.Name == propertyNameReplacement).FirstOrDefault();
+                        replacementProperty?.SetValue(containingObject, replacementPropertyValue);
+                    }
 
-                    queue.Enqueue(($"{(parentPath == "" ? "" : parentPath + ".")}{prop.Name}", prop, prop.GetValue(containingObject), prop.PropertyType));
+                    queue.Enqueue(($"{(parentPath == "" ? "" : parentPath + ".")}{prop.Name}", prop, propertyValue, prop.PropertyType));
                 }
             }
         }
@@ -110,9 +130,54 @@ private static IEnumerable<(string, object, Type)> EnumerateSearchCriterionPaths
     }
 }
 
+private static string GetReplacementName(PropertyInfo property)
+{
+    var searchCriterionAttribute = property.GetCustomAttributes(typeof(SearchCriterionAttribute)).SingleOrDefault() as SearchCriterionAttribute;
+    return searchCriterionAttribute == null ? null : searchCriterionAttribute.ReplacementPropertyName;
+}
+
+private static string ValueConvertor(object propertyValue, Type propertyType)
+{
+    if (propertyType == typeof(Color))
+    {
+        //var colorApproximator = new ColorApproximator();
+        //var realColorFromCamera = new ColorCluster { Color = (Color)propertyValue };
+        //return colorApproximator.GetClosestPaletteColorKey(realColorFromCamera);
+        return "awd";
+    }
+    else if (propertyType == typeof(double))
+    {
+        return string.Format("{0:G17}", propertyValue);
+    }
+    else if (propertyType == typeof(bool))
+    {
+        return FirstCharToLowerCase(propertyValue.ToString());
+    }
+    else
+    {
+        return propertyValue.ToString();
+    }
+}
+
+private static string FirstCharToLowerCase(string str)
+{
+    if (string.IsNullOrEmpty(str) || char.IsLower(str[0]))
+    {
+        return str;
+    }
+
+    return char.ToLower(str[0]) + str.Substring(1);
+}
+
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 public class SearchCriterionAttribute : Attribute
 {
+    public string ReplacementPropertyName { get; private set; }
+
+    public SearchCriterionAttribute(string replacementPropertyName = null)
+    {
+        this.ReplacementPropertyName = replacementPropertyName;
+    }
 }
 
 public class Appearance
@@ -124,6 +189,7 @@ public class Appearance
 }
 public class ShapeDescriptor
 {
+    [SearchCriterion]
     public BoundingBox BoundingBox { set; get; }
     public CenterOfGravity CenterOfGravity { set; get; }
 
@@ -146,10 +212,12 @@ public class ColorDescriptor
 }
 public class ColorCluster
 {
-    [SearchCriterion]
+    [SearchCriterion(nameof(PaletteColor))]
     public Color Color { set; get; }
 
     public double Weight { set; get; }
+    
+    public string PaletteColor { get; set; }
 }
 
 public class Color

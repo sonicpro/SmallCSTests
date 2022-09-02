@@ -8,14 +8,14 @@ void Main()
 	// var transformer = x => new { Original = x, Normalized = x.ToLower() }; //CS0815 "Cannot assign lambda expression to an implicitly-typed variable."
 	
 	// sligntly better, but anonymous object is masked as an Object instance.
-	var transformer = LambdaWrapper<string, object>(x => new { Original = x, Normalized = x.ToLower() });
+	var transformer = LambdaWrapper<string, int, object>((x, length) => new { Original = x, Normalized = x.ToLower(), Length = length });
 	
-	var transformerTypeInferredCorrectly = LambdaWrapper((string x) => new { Original = x, Normalized = x.ToLower() });
+	var transformerTypeInferredCorrectly = LambdaWrapper((string x, int length) => new { Original = x, Normalized = x.ToLower(), Length = length });
 	
 }
 
 // Define other methods and classes here
-private static Func<T, TResult> LambdaWrapper<T, TResult>(Func<T, TResult> matchingLambda)
+private static Func<T, U, TResult> LambdaWrapper<T, U, TResult>(Func<T, U, TResult> matchingLambda)
 {
 	return matchingLambda;
 }
