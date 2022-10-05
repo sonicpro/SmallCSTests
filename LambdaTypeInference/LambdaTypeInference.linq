@@ -11,7 +11,13 @@ void Main()
 	var transformer = LambdaWrapper<string, int, object>((x, length) => new { Original = x, Normalized = x.ToLower(), Length = length });
 	
 	var transformerTypeInferredCorrectly = LambdaWrapper((string x, int length) => new { Original = x, Normalized = x.ToLower(), Length = length });
-	
+
+    var namesWithIndexes = new[] { "Bill", "George", "Kite" }.Select(LambdaWrapper((string name, int index) => new { Name = name, Ordinal = index }));
+
+    foreach (var name in namesWithIndexes)
+    {
+        Console.WriteLine($"{name.Name} has and index of {name.Ordinal}");
+    }
 }
 
 // Define other methods and classes here
