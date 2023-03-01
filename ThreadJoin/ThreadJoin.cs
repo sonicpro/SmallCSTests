@@ -5,7 +5,7 @@ public class Example
 {
    static Thread thread1, thread2;
 
-   public static void Main()
+   public static void ExecuteInThreads()
    {
       thread1 = new Thread(ThreadProc);
       thread1.Name = "Thread1";
