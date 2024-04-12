@@ -22,7 +22,7 @@
   <Namespace>System.Threading.Tasks</Namespace>
 </Query>
 
-// This query can be #load-ed into other queries for BenchmarkDotNet support. *V=1.3*
+// This query can be #load-ed into other queries for BenchmarkDotNet support. *V=1.4*
 // You can modify the code to customize benchmarking behavior. LINQPad will merge any subsequent updates.
 
 #LINQPad optimize+   // Enable compiler/JIT optimizations when benchmarking.
@@ -174,9 +174,9 @@ namespace LINQPad.Benchmark
 			{
 				Record (Measurement.Parse (text, 0));
 			}
-			else if (logKind == LogKind.Default && text.Contains ("\nGC: "))
+			else if (logKind == LogKind.Default && text.Contains ("\n// GC: "))
 			{
-				string gcLine = text.Split ('\n').First (line => line.StartsWith ("GC: "));
+				string gcLine = text.Split ('\n').First (line => line.StartsWith ("// GC: "));
 				Record (Util.Try (() => GcStats.Parse (gcLine)));
 			}
 			else if (logKind == LogKind.Default && text.Contains ("Exception: "))
